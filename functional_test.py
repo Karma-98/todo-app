@@ -38,14 +38,23 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            # List comprehension to return true or false, then any return it
-            # as boolean
-            any(rows.text == '1: Complete CS50' for row in rows)
-        )
+
+        self.assertIn('1: Complete CS50', [row.text for row in rows])
 
         # There is another text box prompting him to enter another
-        # to-do item
+        # to-do item, he enters 'Complete TDD With Django'
+        # and now the page list both items
+
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Complete TDD With Django')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+
+        self.assertIn('1: Complete CS50', [row.text for row in rows])
+        self.assertIn('2: Complete TDD With Django', [row.text for row in rows])
 
         # He wonders if the web app will remember his list, he
         # then sees that the site has generated a unique url for him
