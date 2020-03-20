@@ -9,9 +9,14 @@ class NewVisitorTest(unittest.TestCase):
     def setUp(self):
         path = "/mnt/c/Users/65848/documents/projects/pytest/geckodriver.exe"
         self.browser = webdriver.Firefox(executable_path=path)
-    
+
     def tearDown(self):
         self.browser.quit()
+
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         # John heard of this cool todo app so he enter the url to the homepage
@@ -36,10 +41,7 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-
-        self.assertIn('1: Complete CS50', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Complete CS50')
 
         # There is another text box prompting him to enter another
         # to-do item, he enters 'Complete TDD With Django'
@@ -50,11 +52,8 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-
-        self.assertIn('1: Complete CS50', [row.text for row in rows])
-        self.assertIn('2: Complete TDD With Django', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Complete CS50')
+        self.check_for_row_in_list_table('2: Complete TDD With Django')
 
         # He wonders if the web app will remember his list, he
         # then sees that the site has generated a unique url for him
