@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 from selenium.common.exceptions import WebDriverException
 
-MAX_WAIT = 10
+MAX_WAIT = 5
 path = "/mnt/c/Users/65848/documents/projects/pytest/geckodriver.exe"
 
 
